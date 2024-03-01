@@ -53,7 +53,7 @@ class BusRoute extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 40),
-            child: MilestoneProgress(height: 500,totalMilestones: 5,completedMilestone: 1,milestoneLabels: ['b','a','c','d','d'],),
+            child: MilestoneProgress(height: 500,totalMilestones: 5,completedMilestone: 3,milestoneLabels: ['b','a','c','d','d'],),
           )
         ],
       ),

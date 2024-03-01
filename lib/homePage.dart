@@ -4,6 +4,9 @@ import 'package:major_project/busListPage.dart';
 import 'package:major_project/dartdrawer_utils.dart';
 import 'package:major_project/loadingPage.dart';
 import 'package:major_project/profile.dart';
+import 'package:major_project/services/getAllBusDetails.dart';
+import 'package:major_project/services/getBusWithStops.dart';
+import 'package:major_project/services/getBusstopbyrouteId.dart';
 import 'package:major_project/signupPage.dart';
 
 class HomePage extends StatelessWidget {
@@ -74,6 +77,9 @@ class HomePage extends StatelessWidget {
                       minimumSize: Size(280, 50), // Set the width and height as per your requirement
                     ),
                     onPressed: () {
+                      getBusStopwithRouteid();
+                      //getBusWithStops();
+                      //getAllBus();
                       Navigator.of(context).push(MaterialPageRoute(builder: (context) => BusListPage(),));
                     },
                     child: Text(
