@@ -4,12 +4,15 @@ import 'package:major_project/busRoute.dart';
 import 'package:major_project/dartdrawer_utils.dart';
 import 'package:major_project/liveBus.dart';
 import 'package:major_project/loadingPage.dart';
+import 'package:major_project/model/busByStopsModel.dart';
 import 'package:major_project/profile.dart';
 
 import 'model/busList.dart';
 
 class BusListPage extends StatelessWidget {
-  BusListPage({super.key});
+  final List<BusByStops>? busList;
+  String? status;
+  BusListPage({super.key,this.busList, this.status});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,9 @@ class BusListPage extends StatelessWidget {
         title: Text('Buss Tracking'),
       ),
       drawer: buildDrawer(context),
-      body: Column(
+      body: 
+      busList == null? Center(child: Text("Sorry no buses found"),):
+      Column(
         children: [
           Container(
             decoration: BoxDecoration(
@@ -56,35 +61,36 @@ class BusListPage extends StatelessWidget {
                 ),
                 
                 SizedBox(height: 20,),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 1, 200, 255),
-                    minimumSize: Size(280,
-                        50), // Set the width and height as per your requirement
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => BusListPage(),
-                    ));
-                  },
-                  child: Text(
-                    "Search",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+                // ElevatedButton(
+                //   style: ElevatedButton.styleFrom(
+                //     backgroundColor: Color.fromARGB(255, 1, 200, 255),
+                //     minimumSize: Size(280,
+                //         50), // Set the width and height as per your requirement
+                //   ),
+                //   onPressed: () {
+                //     Navigator.of(context).push(MaterialPageRoute(
+                //       builder: (context) => BusListPage(),
+                //     ));
+                //   },
+                //   child: Text(
+                //     "Search",
+                //     style: TextStyle(
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
           Expanded(
               child: ListView.separated(
                   itemBuilder: (context, index) {
-                    String busname = busList[index]['Bus Name'];
-                    String busNumber = busList[index]['Bus Number'];
-                    String busRoute = busList[index]['Bus Route'];
-                    String startingTime = busList[index]['Staring Time'];
-                    String destinationTime = busList[index]['Destination Time'];
+                    final item = busList![index];
+                    String busname = item.busname;
+                    String busNumber = item.regnum;
+                    String busRoute = "${item.source} - ${item.destination}";
+                    // String startingTime = busList[index]['Staring Time'];
+                    // String destinationTime = busList[index]['Destination Time'];
 
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
@@ -96,13 +102,14 @@ class BusListPage extends StatelessWidget {
                           children: [
                             ListTile(
                               onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => BusRoute(
-                                      busName: busname,
-                                      busNumber: busNumber,
-                                      stratingTime: startingTime,
-                                      destinationTime: destinationTime),
-                                ));
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //   builder: (context) => BusRoute(
+                                //       busName: busname,
+                                //       busNumber: busNumber,
+                                //       stratingTime: startingTime,
+                                //       destinationTime: destinationTime
+                                //       ),
+                                // ));
                               },
                               title: Text(busname),
                               trailing: Text(busNumber),
@@ -112,8 +119,8 @@ class BusListPage extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Text(startingTime),
-                                Text(destinationTime),
+                                // Text(startingTime),
+                                // Text(destinationTime),
                               ],
                             ),
                             Divider(),
@@ -139,7 +146,7 @@ class BusListPage extends StatelessWidget {
                   separatorBuilder: (context, index) {
                     return SizedBox(height: 3);
                   },
-                  itemCount: busList.length))
+                  itemCount: busList!.length))
         ],
       ),
     );
