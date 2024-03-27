@@ -1,15 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:major_project/model/busDetails.dart';
-
+import 'package:major_project/model/getAllBusModel.dart';
 import 'busRoute.dart';
 import 'liveBus.dart';
 
-class ViewBus extends StatelessWidget {
-  String start;
-  String end;
-  final List<BusDetailsModel> busdetails;
-   ViewBus({super.key, required this.busdetails,required this.start,required this.end});
+class ViewAllBus extends StatelessWidget {
+  final List<GetAllBusModel> busdetails;
+   ViewAllBus({super.key, required this.busdetails});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +22,8 @@ class ViewBus extends StatelessWidget {
                 String busname = bus.busname;
                 String busNumber = bus.regnum;
                 String busRoute = bus.routeid.toString();
-                String startingTime = start;
-                String destinationTime = end;
+                String startingTime = bus.source;
+                String destinationTime = bus.destination;
 
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),

@@ -2,6 +2,7 @@
 //
 //     final BusByStops = BusByStopsFromJson(jsonString);
 
+import 'package:meta/meta.dart';
 import 'dart:convert';
 
 BusByStops BusByStopsFromJson(String str) => BusByStops.fromJson(json.decode(str));
@@ -11,43 +12,43 @@ String BusByStopsToJson(BusByStops data) => json.encode(data.toJson());
 class BusByStops {
     int busid;
     String busname;
-    String destination;
-    String ownername;
-    int ownerphone;
+    String endBusstop;
+    String endBustime;
     String regnum;
     int routeid;
-    String source;
+    String startBusstop;
+    String startBustime;
 
     BusByStops({
         required this.busid,
         required this.busname,
-        required this.destination,
-        required this.ownername,
-        required this.ownerphone,
+        required this.endBusstop,
+        required this.endBustime,
         required this.regnum,
         required this.routeid,
-        required this.source,
+        required this.startBusstop,
+        required this.startBustime,
     });
 
     factory BusByStops.fromJson(Map<String, dynamic> json) => BusByStops(
         busid: json["busid"],
         busname: json["busname"],
-        destination: json["destination"],
-        ownername: json["ownername"],
-        ownerphone: json["ownerphone"],
+        endBusstop: json["end_busstop"],
+        endBustime: json["end_bustime"],
         regnum: json["regnum"],
         routeid: json["routeid"],
-        source: json["source"],
+        startBusstop: json["start_busstop"],
+        startBustime: json["start_bustime"],
     );
 
     Map<String, dynamic> toJson() => {
         "busid": busid,
         "busname": busname,
-        "destination": destination,
-        "ownername": ownername,
-        "ownerphone": ownerphone,
+        "end_busstop": endBusstop,
+        "end_bustime": endBustime,
         "regnum": regnum,
         "routeid": routeid,
-        "source": source,
+        "start_busstop": startBusstop,
+        "start_bustime": startBustime,
     };
 }

@@ -1,11 +1,12 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:major_project/constants/urls.dart';
-import 'package:major_project/model/getAllBusModel.dart';
+import 'package:major_project/model/getRoutemodel.dart';
 
 
-Future<List<GetAllBusModel>?> getAllBus() async{
-  final uri = Uri.parse("$baseUrl/getallbus");
+Future<List<BusRoutes>?> getRouteName() async{
+  final uri = Uri.parse("$baseUrl/getallroute");
   final responce = await http.get(uri);
   print(responce.statusCode);
   print(responce.body);
@@ -13,8 +14,8 @@ Future<List<GetAllBusModel>?> getAllBus() async{
   try {
     if (responce.statusCode == 200) {
       final res = jsonDecode(responce.body);
-      final datas = (res as List).map((e) => GetAllBusModel.fromJson(e)).toList();
-      return datas;
+      final routes = (res as List).map((e) => BusRoutes.fromJson(e)).toList();
+      return routes;
     }
     else{
       print("Else ");

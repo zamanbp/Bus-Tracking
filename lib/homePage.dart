@@ -7,6 +7,7 @@ import 'package:major_project/model/busByStopsModel.dart';
 import 'package:major_project/profile.dart';
 import 'package:major_project/services/getAllBusDetails.dart';
 import 'package:major_project/services/getBusWithStops.dart';
+import 'package:major_project/services/getBusbyName.dart';
 import 'package:major_project/services/getBusstopbyrouteId.dart';
 import 'package:major_project/signupPage.dart';
 
@@ -15,11 +16,18 @@ class HomePage extends StatelessWidget {
 
   TextEditingController starting = TextEditingController();
   TextEditingController endingg = TextEditingController();
+  TextEditingController busname = TextEditingController();
   ValueNotifier<bool> isClicked = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Color.fromARGB(255, 3, 28, 104),
+        title: Text('Bus Tracking', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white), ),
+        actions: [IconButton(onPressed: (){}, icon: Icon(Icons.notifications))],
+      ),
       drawer: buildDrawer(context),
       floatingActionButtonLocation: CustomFABLocation(),
       floatingActionButton: FloatingActionButton(
@@ -36,7 +44,7 @@ class HomePage extends StatelessWidget {
                 child: Image.asset('assets/images/map.png')),
           ),
           Positioned(
-            bottom: 20,
+            top: 20,
             child: 
             ValueListenableBuilder(
               valueListenable: isClicked
@@ -54,7 +62,8 @@ class HomePage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
                       child: CupertinoTextField(
-                            controller: starting,
+
+                            controller: busname,
                             placeholder: 'Bus Name',
                             suffix: Icon(Icons.search),
                             decoration: BoxDecoration(
@@ -70,10 +79,11 @@ class HomePage extends StatelessWidget {
                       minimumSize: Size(280, 50), // Set the width and height as per your requirement
                     ),
                     onPressed: () async{
-                      final responce = await getBuses();
-                      //getBusStopwithRouteid();                      
-                      //getAllBus();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => BusListPage(busList: responce ,),));
+                      
+                      getBusbyName(busname.text);
+                      // getBusStopwithRouteid();                      
+                      // getAllBus();
+                      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => BusListPage(busList: responce ,),));
                     },
                     child: Text(
                       "Search",
@@ -142,9 +152,9 @@ class HomePage extends StatelessWidget {
                     ),
                     onPressed: () async{
                       final responce = await getBuses();
-                      //getBusStopwithRouteid();                      
-                      //getAllBus();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => BusListPage(busList: responce ,),));
+                      print(responce);
+                      
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => BusListPage(busList: responce,starting: starting.text,ending: endingg.text,),));
                     },
                     child: Text(
                       "Search",
@@ -167,15 +177,14 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
-      appBar: AppBar(
-        title: Text('Bus Tracking'),
-      ),
+      
     );
   }
   Future<List<BusByStops>?> getBuses() async{
     final datas = await getBusWithStops(starting.text,endingg.text);
     if (datas != null) {
       if (datas.length>0) {
+        print("here dats");
         return datas;
       }
       else{

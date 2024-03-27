@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:major_project/busRoutePage.dart';
+import 'package:major_project/constants/globalVar.dart';
 import 'package:major_project/loadingPage.dart';
+import 'package:major_project/model/getRoutemodel.dart';
 import 'package:major_project/profile.dart';
+import 'package:major_project/savedRoutePage.dart';
+import 'package:major_project/services/addnotificationApi.dart';
+import 'package:major_project/services/getAllBusDetails.dart';
+import 'package:major_project/services/getBusRoutes.dart';
+import 'package:major_project/services/viewsavedRoute.dart';
 import 'package:major_project/viewBus.dart';
+import 'package:major_project/viewallBus.dart';
 
 Widget buildDrawer(BuildContext context) {
   return Drawer(
@@ -10,12 +19,12 @@ Widget buildDrawer(BuildContext context) {
         DrawerHeader(
           child: Container(
             height: 100,
-            width: double.infinity,
-            color: Color.fromARGB(255, 1, 200, 255),
+            width: 350,
+            color: Color.fromARGB(255, 3, 28, 104),
             child: Center(
               child: Text(
                 "Bus Tracking",
-                style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Colors.white),
               ),
             ),
           ),
@@ -30,27 +39,36 @@ Widget buildDrawer(BuildContext context) {
                 ));
               }),
               SizedBox(height: 25),
-              drawerItem(context, Icons.bookmark, 'Saved Routes', () {
+              drawerItem(context, Icons.bookmark, 'View Routes', () async{  
+                //final routes = await getRouteName();
+                busRouteNav(context);
+              }),
+              SizedBox(height: 25),
+              drawerItem(context, Icons.bookmark, 'Saved Routes', () async{
+                final routes = await viewsavedRouteApi(loginId.toString());
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => Profile(),
+                  builder: (context) => 
+                  SavedBusRoutePage(routes: routes,),
                 ));
               }),
         
               SizedBox(height: 25),
-              drawerItem(context, Icons.remove_red_eye, 'View Bus', () { 
+              drawerItem(context, Icons.remove_red_eye, 'View Bus', () async{ 
+                final res = await getAllBus();
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ViewBus(),
+                  builder: (context) => ViewAllBus(busdetails: res!),
                 ));
               }),
         
               SizedBox(height: 25),
-              drawerItem(context, Icons.help_center, 'Help', () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => Profile(),
-                ));
+              drawerItem(context, Icons.help_center, 'Help', () async{
+               // await addNotification("1", "kl");
+                // Navigator.of(context).push(MaterialPageRoute(
+                //   builder: (context) => Profile(),
+                // ));
               }),
-              SizedBox(height: 240),
-              drawerItem(context, Icons.exit_to_app, 'Logout', () {
+              SizedBox(height: 150),
+              drawerItem(context, Icons.exit_to_app, 'Exit', () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => LoadingPage(),
                 ));
@@ -76,4 +94,11 @@ Widget drawerItem(BuildContext context, IconData icon, String label, VoidCallbac
       ),
     ],
   );
+}
+
+busRouteNav(BuildContext context) async{
+  final routes = await getRouteName();
+  Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => BusRoutePage(routes: routes!),
+                ));
 }

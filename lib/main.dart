@@ -6,6 +6,7 @@ import 'package:major_project/homePage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:major_project/liveBus.dart';
 import 'package:major_project/loadingPage.dart';
+import 'package:major_project/loginPage.dart';
 import 'package:major_project/signupPage.dart';
 
 void main()async {
@@ -34,7 +35,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:SignupPage(),
+      home:
+      LoginScreenNew()
+      //HomePage(),
     );
   }
 }
