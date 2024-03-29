@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:major_project/busRoute.dart';
+import 'package:flutter/widgets.dart';
+import 'package:major_project/presentation/busRoute.dart';
 import 'package:major_project/dartdrawer_utils.dart';
 import 'package:major_project/liveBus.dart';
 import 'package:major_project/model/busByStopsModel.dart';
@@ -23,15 +24,16 @@ class BusListPage extends StatefulWidget {
 }
 
 class _BusListPageState extends State<BusListPage> {
-  String dropdownvalue = 'Kozhikode';  
-  TextEditingController busname =
-      TextEditingController(); 
-      int? _selectedStopId; 
- //Text editing controller for search button
+  ValueNotifier<String> dropdownvalue = ValueNotifier('Kozhikode');
+  TextEditingController busname = TextEditingController();
+  int? _selectedStopId;
+  //Text editing controller for search button
   @override
   Widget build(BuildContext context) {
-    TextEditingController startingpoint = TextEditingController(text: widget.starting);
-    TextEditingController endingpoint = TextEditingController(text: widget.ending);
+    TextEditingController startingpoint =
+        TextEditingController(text: widget.starting);
+    TextEditingController endingpoint =
+        TextEditingController(text: widget.ending);
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -85,9 +87,6 @@ class _BusListPageState extends State<BusListPage> {
                           ),
                         ),
                       ),
-                      // SizedBox(
-                      //   height: 20,
-                      // ),
                     ],
                   ),
                 ),
@@ -143,58 +142,92 @@ class _BusListPageState extends State<BusListPage> {
                                   Padding(
                                       padding: const EdgeInsets.only(left: 5),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           TextButton.icon(
                                             onPressed: () {
                                               Navigator.of(context).push(
                                                   MaterialPageRoute(
-                                                      builder: (context) => LiveBus(
-                                                          busName: busname,
-                                                          stratingTime:
-                                                              item.startBustime,
-                                                          busNumber: busNumber)));
+                                                      builder: (context) =>
+                                                          LiveBus(
+                                                              busName: busname,
+                                                              stratingTime: item
+                                                                  .startBustime,
+                                                              busNumber:
+                                                                  busNumber)));
                                             },
-                                            icon: Icon(
-                                                Icons.location_searching_outlined),
+                                            icon: Icon(Icons
+                                                .location_searching_outlined),
                                             label: Text("Live Location"),
                                           ),
-                                          TextButton(onPressed: (){
-                                            showDialog(
-                context: context,
-                builder: (ctx) => AlertDialog(
-                  title: const Text("Notify Me"),
-                  content:  DropdownButton<int>( // Change to DropdownButton<int?>
-          hint: Text('Select a Stop'),
-          value: _selectedStopId,
-          onChanged: (int? newValue) { // Change parameter type to int?
-          print(newValue);
-            setState(() {
-              _selectedStopId = newValue;
-            });
-          },
-          items: stopsList.map<DropdownMenuItem<int>>((Map<String, dynamic> stop) {
-            return DropdownMenuItem<int>(
-              value: stop['stopid'],
-              child: Text(stop['stopname']),
-            );
-          }).toList(),
-        ),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () async{
-                        await addNotification(item.busid.toString(),item.regnum,_selectedStopId.toString(),item.busname);
-                      },
-                      child: Container(
-                        color: Colors.green,
-                        padding: const EdgeInsets.all(14),
-                        child: const Text("okay"),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-                                          }, child: Text("Notify"))
+                                          TextButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (ctx) => AlertDialog(
+                                                    title:
+                                                        const Text("Notify Me"),
+                                                    content:
+                                                        DropdownButton<int>(
+                                                      // Change to DropdownButton<int?>
+                                                      hint:
+                                                          Text('Select a Stop'),
+                                                      value: _selectedStopId,
+                                                      onChanged:
+                                                          (int? newValue) {
+                                                        // Change parameter type to int?
+                                                        print(newValue);
+                                                        setState(() {
+                                                          _selectedStopId =
+                                                              newValue;
+                                                        });
+                                                      },
+                                                      items: stopsList.map<
+                                                              DropdownMenuItem<
+                                                                  int>>(
+                                                          (Map<String, dynamic>
+                                                              stop) {
+                                                        return DropdownMenuItem<
+                                                            int>(
+                                                          value: stop['stopid'],
+                                                          child: Text(
+                                                              stop['stopname']),
+                                                        );
+                                                      }).toList(),
+                                                    ),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () async {
+                                                          final res =
+                                                              await addNotification(
+                                                                  item.busid
+                                                                      .toString(),
+                                                                  item.regnum,
+                                                                  _selectedStopId
+                                                                      .toString(),
+                                                                  item.busname);
+                                                                  print("noti result : ${res}");
+                                                          if (res == true) {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          }
+                                                        },
+                                                        child: Container(
+                                                          color: Colors.green,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(14),
+                                                          child: const Text(
+                                                              "okay"),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                              child: Text("Notify"))
                                         ],
                                       ))
                                 ],
@@ -213,10 +246,10 @@ class _BusListPageState extends State<BusListPage> {
 
   navigateToTracking(BuildContext context, BusByStops item) async {
     bustracking.clear();
-    bustracking = await getBusLocation(item.busid.toString(),item.regnum);
+    bustracking = await getBusLocation(item.busid.toString(), item.regnum);
     print(bustracking.length);
-    print(bustracking[bustracking.length-1].order);
-    print(bustracking[bustracking.length-1].busstop);
+    print(bustracking[bustracking.length - 1].order);
+    print(bustracking[bustracking.length - 1].busstop);
     busstops = await getStopsByRoute(item.routeid.toString());
     await getStops();
     print(stops);
@@ -224,7 +257,7 @@ class _BusListPageState extends State<BusListPage> {
     await getBusStopwithRouteid(item.routeid.toString());
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => BusRoute(
-        busid : item.busid.toString(),
+          busid: item.busid.toString(),
           busName: item.busname,
           busNumber: item.regnum,
           stratingTime: item.startBustime,
@@ -242,10 +275,9 @@ class _BusListPageState extends State<BusListPage> {
   }
 }
 
-
 final stopsList = [
-  {"stopid":1,"stopname":"Kozhikode"},
-  {"stopid":2,"stopname":"Kannur"},
-  {"stopid":6,"stopname":"Koyilandy"},
-  {"stopid":7,"stopname":"Vatakara"}
+  {"stopid": 1, "stopname": "Kozhikode"},
+  {"stopid": 2, "stopname": "Kannur"},
+  {"stopid": 6, "stopname": "Koyilandy"},
+  {"stopid": 7, "stopname": "Vatakara"}
 ];

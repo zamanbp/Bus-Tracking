@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:major_project/homePage.dart';
-import 'package:major_project/loginPage.dart';
-import 'package:major_project/signupPage.dart';
+import 'package:major_project/presentation/homePage.dart';
+import 'package:major_project/presentation/loginPage.dart';
+import 'package:major_project/presentation/signupPage.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({super.key});

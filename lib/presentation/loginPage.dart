@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:major_project/customtextfield.dart';
-import 'package:major_project/homePage.dart';
+import 'package:major_project/widgets/customtextfield.dart';
+import 'package:major_project/presentation/homePage.dart';
 import 'package:major_project/services/loginApi.dart';
-import 'package:major_project/signupPage.dart';
+import 'package:major_project/presentation/signupPage.dart';
 
 class LoginScreenNew extends StatefulWidget {
   LoginScreenNew({Key? key}) : super(key: key);
@@ -106,10 +106,7 @@ class _LoginScreenState extends State<LoginScreenNew> {
                     ),
 
                     //log in button
-                    ValueListenableBuilder(
-                      valueListenable: isLoading,
-                      builder: (context, value, child) {
-                        return Container(
+                    Container(
                           height: 55,
                           width: double.infinity,
                           child: ElevatedButton(
@@ -121,17 +118,24 @@ class _LoginScreenState extends State<LoginScreenNew> {
                                     passwordController.text);
                                 print("responce $responce");
                                 if (responce == "success") {
+                                  isLoading.value = false;
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => HomePage()));
                                 }
+                                else{
+                                  isLoading.value = false;
+                                }
                               }
                             },
-                            child: isLoading.value
+                            child: 
+                            ValueListenableBuilder(valueListenable: isLoading, builder: (context, value, child) {
+                              return isLoading.value
                                 ? CircularProgressIndicator()
                                 : Text("Login",
                                     style: TextStyle(
-                                        fontSize: 17, color: Colors.white)),
-                            style: ButtonStyle(
+                                        fontSize: 17, color: Colors.white));
+                            },),              
+                        style: ButtonStyle(
                               shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -141,9 +145,7 @@ class _LoginScreenState extends State<LoginScreenNew> {
                                   MaterialStateProperty.all(Colors.blue),
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
                     SizedBox(
                       height: 5,
                     ),
@@ -160,7 +162,6 @@ class _LoginScreenState extends State<LoginScreenNew> {
             ),
           ),
         ),
-      )),
-    );
-  }
+      )),);
+}
 }

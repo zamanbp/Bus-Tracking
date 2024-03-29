@@ -33,6 +33,7 @@ dependencies:
   firebase_core:
   firebase_auth:
   http:
+  url_launcher:
   
 
 

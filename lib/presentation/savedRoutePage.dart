@@ -1,22 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:major_project/getBusesbyrouteId.dart';
+import 'package:major_project/constants/globalVar.dart';
+import 'package:major_project/services/getBusesbyrouteId.dart';
 import 'package:major_project/model/savedBusModel.dart';
-import 'package:major_project/viewBus.dart';
+import 'package:major_project/presentation/viewBus.dart';
+import 'package:major_project/services/removeSavedRoute.dart';
+import 'package:major_project/services/viewsavedRoute.dart';
 
-class SavedBusRoutePage extends StatelessWidget {
+class SavedBusRoutePage extends StatefulWidget {
   final List<SavedBusModel>? routes;
   const SavedBusRoutePage({Key? key, this.routes}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  State<SavedBusRoutePage> createState() => _SavedBusRoutePageState();
+}
+
+class _SavedBusRoutePageState extends State<SavedBusRoutePage> {
+  @override
+  Widget build(BuildContext context) {   
     return Scaffold(
       appBar: AppBar(
         title: Text("Routes"),
       ),
       body: ListView.builder(
         itemBuilder: (context, index) {
-          final route = routes![index];
+          final route = savedRoutes[index];
           return InkWell(
             onTap: () async{
               final buses = await getBusByRouteId(route.routeid.toString());
@@ -36,16 +44,24 @@ class SavedBusRoutePage extends StatelessWidget {
                   ),
                   trailing: IconButton(
                     onPressed: () async{
-                      //Navigator.of(context).push(MaterialPageRoute(builder: (context) => ViewBus(busdetails: busdetails, start: route.starting, end: route.ending),))
+                      final status = await deleteRouteApi(route.routeid.toString());
+                      if (status == "success") {
+                        final routes = await viewsavedRouteApi(loginId.toString());
+                        savedRoutes = routes;
+                        setState(() {
+                          
+                        });
+                       //Navigator.of(context).push(MaterialPageRoute(builder: (context) => ViewBus(busdetails: busdetails, start: route.starting, end: route.ending),))
+                      }
                     },
-                    icon: Icon(Icons.arrow_forward_ios, color: Colors.black38),
+                    icon: Icon(Icons.delete, color: Colors.black38),
                   ),
                 ),
               ),
             ),
           );
         },
-        itemCount: routes!.length,
+        itemCount: widget.routes!.length,
       ),
     );
   }

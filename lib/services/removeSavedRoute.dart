@@ -1,26 +1,31 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:major_project/constants/globalVar.dart';
 import 'package:major_project/constants/urls.dart';
-import 'package:major_project/model/savedBusModel.dart';
 
-
-Future<List<SavedBusModel>> viewsavedRouteApi(String lid) async{
+Future<String> deleteRouteApi(String routeid) async{
   var client = http.Client();
   try {
-    final responce = await client.get(Uri.parse("$baseUrl/getsavedroute?logid=$lid"));
+    final responce = await client.get(Uri.parse("$baseUrl/deletesavedroute?logid=$loginId&route=$routeid"));
     print("status : ${responce.body}");
     if (responce.statusCode == 200 ) {
       final res = jsonDecode(responce.body);
-      final routes = (res as List).map((e) => SavedBusModel.fromJson(e)).toList();
-      return routes;   
+      if (res["task"] == "success") {
+        return "success";
+      }
+      else{
+        return "failed";
+      }
     }
     else{
       print(responce.statusCode);
-      return savedRoutes;
+      return "failed";
+
     }
   } catch (e) {
     print("catch : ${e.toString()}");
-    return savedRoutes;
-  }  
+    return "failed";
+  }
+  
 }

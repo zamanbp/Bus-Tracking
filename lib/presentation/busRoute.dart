@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:major_project/dartdrawer_utils.dart';
 import 'package:major_project/model/commonList.dart';
-import 'package:major_project/progressBar.dart';
+import 'package:major_project/widgets/progressBar.dart';
 import 'package:major_project/services/getbuscurrentlocation.dart';
 
 class BusRoute extends StatefulWidget {
@@ -84,8 +84,8 @@ class _BusRouteState extends State<BusRoute> {
     //bustracking.clear();
     bustracking = await getBusLocation(busid,busno);
     print(bustracking.length);
-    print(bustracking[bustracking.length-1].order);
-    print(bustracking[bustracking.length-1].busstop);
+    print("OEDER STOP : ${bustracking[bustracking.length-1].order}");
+    print("STOP ID : ${bustracking[bustracking.length-1].busstop}");
     setState(() {
     });
   }

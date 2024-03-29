@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:major_project/busRoutePage.dart';
+import 'package:major_project/presentation/busRoutePage.dart';
 import 'package:major_project/constants/globalVar.dart';
 import 'package:major_project/loadingPage.dart';
 import 'package:major_project/model/getRoutemodel.dart';
-import 'package:major_project/profile.dart';
-import 'package:major_project/savedRoutePage.dart';
+import 'package:major_project/presentation/profile.dart';
+import 'package:major_project/presentation/savedRoutePage.dart';
 import 'package:major_project/services/addnotificationApi.dart';
 import 'package:major_project/services/getAllBusDetails.dart';
 import 'package:major_project/services/getBusRoutes.dart';
 import 'package:major_project/services/viewsavedRoute.dart';
-import 'package:major_project/viewBus.dart';
-import 'package:major_project/viewallBus.dart';
+import 'package:major_project/presentation/viewBus.dart';
+import 'package:major_project/presentation/viewallBus.dart';
 
 Widget buildDrawer(BuildContext context) {
   return Drawer(
@@ -39,13 +39,14 @@ Widget buildDrawer(BuildContext context) {
                 ));
               }),
               SizedBox(height: 25),
-              drawerItem(context, Icons.bookmark, 'View Routes', () async{  
+              drawerItem(context, Icons.route, 'View Routes', () async{  
                 //final routes = await getRouteName();
                 busRouteNav(context);
               }),
               SizedBox(height: 25),
               drawerItem(context, Icons.bookmark, 'Saved Routes', () async{
                 final routes = await viewsavedRouteApi(loginId.toString());
+                savedRoutes = routes;
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => 
                   SavedBusRoutePage(routes: routes,),
@@ -68,7 +69,7 @@ Widget buildDrawer(BuildContext context) {
                 // ));
               }),
               SizedBox(height: 150),
-              drawerItem(context, Icons.exit_to_app, 'Exit', () {
+              drawerItem(context, Icons.exit_to_app, 'Sign out', () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => LoadingPage(),
                 ));

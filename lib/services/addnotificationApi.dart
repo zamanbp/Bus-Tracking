@@ -6,7 +6,7 @@ import 'package:major_project/constants/urls.dart';
 import 'package:major_project/model/busBylocaatinAndStops.dart';
 import 'package:major_project/model/commonList.dart';
 
-Future<List<BusStopsAndLocation>> addNotification(String busid,String reg,String stopid,String name) async{
+Future<bool> addNotification(String busid,String reg,String stopid,String name) async{
   //bustracking.clear();
   final uri = Uri.parse("$baseUrl/insert_nnotification?stopid=$stopid&userid=$loginId&busid=$busid&busregno=$reg&busname=$name");
   final responce = await http.get(uri);
@@ -17,16 +17,16 @@ Future<List<BusStopsAndLocation>> addNotification(String busid,String reg,String
     if (responce.statusCode == 200) {
       print("success");
       final res = jsonDecode(responce.body);
-      final reply = (res as List).map((e) => BusStopsAndLocation.fromJson(e)).toList();
-      print("rply $reply");
-      return reply;
+      //final reply = (res as List).map((e) => BusStopsAndLocation.fromJson(e)).toList();
+      //print("rply $reply");
+      return true;
     }
     else{
       print("Else ");
-      return bustracking;
+      return false;
     }
   } catch (e) {
     print(e.toString());
-    return bustracking;
+    return false;
   }
 }

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-class Profile extends StatelessWidget {
-  const Profile({super.key});
+class BusNotification extends StatelessWidget {
+  const BusNotification({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:Text("profile"),
       
     );
   }

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:major_project/constants/globalVar.dart';
-import 'package:major_project/getBusesbyrouteId.dart';
+import 'package:major_project/services/getBusesbyrouteId.dart';
 import 'package:major_project/model/getRoutemodel.dart';
 import 'package:major_project/services/saveRoute.dart';
-import 'package:major_project/viewBus.dart';
+import 'package:major_project/presentation/viewBus.dart';
 
 class BusRoutePage extends StatelessWidget {
   final List<BusRoutes>? routes;
